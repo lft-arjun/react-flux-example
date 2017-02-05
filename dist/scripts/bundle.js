@@ -47983,7 +47983,7 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 	}
 });
 
-module.exports = AuthorPage;
+module.exports = AuthorPage; 
 
 },{"../../api/authorApi":181,"./authorList":184,"react":180}],186:[function(require,module,exports){
 "use strict";

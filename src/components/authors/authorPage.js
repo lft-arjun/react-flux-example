@@ -38,4 +38,4 @@ var AuthorPage = React.createClass({
 	}
 });
 
-module.exports = AuthorPage;
+module.exports = AuthorPage; 
