@@ -6,18 +6,20 @@ var About = React.createClass({
 
 	render: function() {
 		return (
-				<div>
-					<h1>About</h1>
-					<div>
-						This is application use the following technologies:
-						<ul>
-							<li> React</li>
-							<li> React Router</li>
-							<li> Flux</li>
-							<li> Node</li>
-							<li> Gulp</li>
-							<li> Browerify</li>
-						</ul>
+				<div className="jumbotron">
+					<div className="container">
+						<div className="row">
+							<h1>About</h1>
+							This is application use the following technologies:
+							<ul>
+								<li> React</li>
+								<li> React Router</li>
+								<li> Flux</li>
+								<li> Node</li>
+								<li> Gulp</li>
+								<li> Browerify</li>
+							</ul>
+						</div>
 					</div>
 				</div>	
 			);
