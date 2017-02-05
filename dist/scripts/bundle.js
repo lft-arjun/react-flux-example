@@ -47907,17 +47907,12 @@ module.exports = About;
 "use strict";
 
 var React = require('react');
-var AuthorApi = require('../../api/authorApi');
 
-var Authors = React.createClass({displayName: "Authors",
-	getInitialState: function() {
-		return {
-			authors: []
-		}
+var AuthorList = React.createClass({displayName: "AuthorList",
+	propTypes: {
+		authors: React.PropTypes.array.isRequired
 	},
-	componentWillMount: function() {
-		this.setState({authors: AuthorApi.getAllAuthors()});
-	},
+
 	render: function() {
 		var createAuthorRow = function(author) {
 			return (
@@ -47930,14 +47925,13 @@ var Authors = React.createClass({displayName: "Authors",
 		return (
 				React.createElement("div", {className: "jumbotron"}, 
 					React.createElement("div", {className: "container"}, 
-					React.createElement("h1", null, "Authors page"), 
 						React.createElement("table", {className: "table"}, 
 							React.createElement("thead", null, 
 								React.createElement("th", null, "ID"), 
 								React.createElement("th", null, "Name")
 							), 
 							React.createElement("tbody", null, 
-								this.state.authors.map(createAuthorRow, this)
+								this.props.authors.map(createAuthorRow, this)
 							)
 						)
 					)
@@ -47946,9 +47940,52 @@ var Authors = React.createClass({displayName: "Authors",
 	}
 });
 
-module.exports = Authors;
+module.exports = AuthorList;
 
-},{"../../api/authorApi":181,"react":180}],185:[function(require,module,exports){
+},{"react":180}],185:[function(require,module,exports){
+"use strict";
+
+var React = require('react');
+var AuthorApi = require('../../api/authorApi');
+var AuthorList = require('./authorList');
+
+var AuthorPage = React.createClass({displayName: "AuthorPage",
+
+	getInitialState: function() {
+		return {
+			authors: []
+		};
+	},
+
+	componentDidMount: function() {
+		if (this.isMounted()) {
+			this.setState({authors: AuthorApi.getAllAuthors()});
+		}
+	},
+
+	render: function() {
+		var createAuthorRow = function(author) {
+			return (
+				React.createElement("tr", {key: author.id}, 
+					React.createElement("td", null, " ", React.createElement("a", {href: "/#authors/"+ author.id}, author.id)), 
+					React.createElement("td", null, " ", author.firstName, " ", author.lastName)
+				)	
+			);	
+		};
+		return (
+				React.createElement("div", {className: "jumbotron"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("h1", null, "Authors page"), 
+						React.createElement(AuthorList, {authors: this.state.authors})
+					)
+				)
+			);
+	}
+});
+
+module.exports = AuthorPage;
+
+},{"../../api/authorApi":181,"./authorList":184,"react":180}],186:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -47975,7 +48012,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header; 
 
-},{"react":180}],186:[function(require,module,exports){
+},{"react":180}],187:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -47995,7 +48032,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":180}],187:[function(require,module,exports){
+},{"react":180}],188:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
@@ -48035,4 +48072,4 @@ win.addEventListener('hashchange', render);
 render();
 })(window);
 
-},{"./components/about/aboutPage":183,"./components/authors/authorPage":184,"./components/common/header":185,"./components/homePage":186,"jquery":24,"react":180,"react-dom":27}]},{},[187]);
+},{"./components/about/aboutPage":183,"./components/authors/authorPage":185,"./components/common/header":186,"./components/homePage":187,"jquery":24,"react":180,"react-dom":27}]},{},[188]);
