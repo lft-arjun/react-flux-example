@@ -30713,6 +30713,35 @@ module.exports = require('./lib/React');
 },{"./lib/React":156}],180:[function(require,module,exports){
 "use strict";
 
+var React = require('react');
+
+var About = React.createClass({displayName: "About",
+
+	render: function() {
+		return (
+				React.createElement("div", null, 
+					React.createElement("h1", null, "About"), 
+					React.createElement("div", null, 
+						"This is application use the following technologies:", 
+						React.createElement("ul", null, 
+							React.createElement("li", null, " React"), 
+							React.createElement("li", null, " React Router"), 
+							React.createElement("li", null, " Flux"), 
+							React.createElement("li", null, " Node"), 
+							React.createElement("li", null, " Gulp"), 
+							React.createElement("li", null, " Browerify")
+						)
+					)
+				)	
+			);
+	}
+});
+
+module.exports = About;
+
+},{"react":179}],181:[function(require,module,exports){
+"use strict";
+
 var React = require("react");
 
 var Home = React.createClass({displayName: "Home",
@@ -30728,17 +30757,40 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":179}],181:[function(require,module,exports){
+},{"react":179}],182:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
 var ReactDom = require('react-dom');
 var Home = require('./components/homePage');
+var About = require('./components/aboutPage');
+( function(win) {
+	"use strict";
+var App = React.createClass({displayName: "App",
 
-var App = console.log("Hello world from browserfy"); 
+	render: function() {
+		var Child;
 
+		switch (this.props.route) {
+			case 'about': Child = About; break;
+			default: Child = Home;
+		}
 
+		return (
+				React.createElement("div", null, 
+					React.createElement(Child, null)
+				)
+			);
+	}
+}); 
 
-ReactDom.render(React.createElement(Home, null), document.getElementById('root'));
+function render() {
+	var route = win.location.hash.substr(1);
+	ReactDom.render(React.createElement(App, {route: route}), document.getElementById('root'));
+}
+win.addEventListener('hashchange', render);
 
-},{"./components/homePage":180,"jquery":24,"react":179,"react-dom":26}]},{},[181]);
+render();
+})(window);
+
+},{"./components/aboutPage":180,"./components/homePage":181,"jquery":24,"react":179,"react-dom":26}]},{},[182]);
