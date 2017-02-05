@@ -6,7 +6,7 @@ var About = React.createClass({
 
 	render: function() {
 		return (
-				<div className="jumbotron">
+				<div>
 					<h1>About</h1>
 					<div>
 						This is application use the following technologies:

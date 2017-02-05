@@ -30742,6 +30742,32 @@ module.exports = About;
 },{"react":179}],181:[function(require,module,exports){
 "use strict";
 
+var React = require('react');
+
+var Header = React.createClass({displayName: "Header",
+	render: function() {
+		return (
+				React.createElement("nav", {className: "navbar navbar-default"}, 
+					React.createElement("div", {className: "container-fluid"}, 
+						React.createElement("a", {href: "/", className: "navbar-brand"}, 
+							React.createElement("img", {src: "images/small-logo.png", alt: "pint"})
+						), 
+						React.createElement("ul", {className: "nav navbar-nav"}, 
+							React.createElement("li", null, " ", React.createElement("a", {href: "/"}, "Home")), 
+							React.createElement("li", null, " ", React.createElement("a", {href: "/#about"}, "About"))
+
+						)
+					)
+				)
+			);
+	}
+});
+
+module.exports = Header; 
+
+},{"react":179}],182:[function(require,module,exports){
+"use strict";
+
 var React = require("react");
 
 var Home = React.createClass({displayName: "Home",
@@ -30757,13 +30783,14 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":179}],182:[function(require,module,exports){
+},{"react":179}],183:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
 var ReactDom = require('react-dom');
 var Home = require('./components/homePage');
-var About = require('./components/aboutPage');
+var About = require('./components/about/aboutPage');
+var Header = require('./components/common/header');
 ( function(win) {
 	"use strict";
 var App = React.createClass({displayName: "App",
@@ -30778,6 +30805,7 @@ var App = React.createClass({displayName: "App",
 
 		return (
 				React.createElement("div", null, 
+					React.createElement(Header, null), 
 					React.createElement(Child, null)
 				)
 			);
@@ -30793,4 +30821,4 @@ win.addEventListener('hashchange', render);
 render();
 })(window);
 
-},{"./components/aboutPage":180,"./components/homePage":181,"jquery":24,"react":179,"react-dom":26}]},{},[182]);
+},{"./components/about/aboutPage":180,"./components/common/header":181,"./components/homePage":182,"jquery":24,"react":179,"react-dom":26}]},{},[183]);

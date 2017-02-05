@@ -3,7 +3,8 @@ $ = jQuery = require('jquery');
 var React = require('react');
 var ReactDom = require('react-dom');
 var Home = require('./components/homePage');
-var About = require('./components/aboutPage');
+var About = require('./components/about/aboutPage');
+var Header = require('./components/common/header');
 ( function(win) {
 	"use strict";
 var App = React.createClass({
@@ -18,6 +19,7 @@ var App = React.createClass({
 
 		return (
 				<div>
+					<Header />
 					<Child />
 				</div>
 			);
