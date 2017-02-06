@@ -13,6 +13,7 @@ var Home = require('./components/homePage');
 var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
 var Authors = require('./components/authors/authorPage');
+var AuthorDetailPage = require('./components/authors/authorDetail');
 
 ReactDom.render((
     <Router history={hashHistory}>
@@ -20,6 +21,7 @@ ReactDom.render((
             <IndexRoute component={Home} />
             <Route path="about" component={About} />
             <Route path="authors" component={Authors} />
+            <Route path="authors/detail/:id" component={AuthorDetailPage} />
         </Route>
     </Router>
   ), document.getElementById('root'));

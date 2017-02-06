@@ -19,20 +19,9 @@ var AuthorPage = React.createClass({
 	},
 
 	render: function() {
-		var createAuthorRow = function(author) {
-			return (
-				<tr key={author.id}>
-					<td> <a href = {"/#authors/"+ author.id}>{author.id}</a></td>
-					<td> {author.firstName} {author.lastName}</td>
-				</tr>	
-			);	
-		};
 		return (
 				<div className = "jumbotron">
-					<div className = "container">
-						<h1>Authors page</h1>
-						<AuthorList authors = {this.state.authors} />
-					</div>
+					<AuthorList authors = {this.state.authors} />
 				</div>
 			);
 	}

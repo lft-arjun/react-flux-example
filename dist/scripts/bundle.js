@@ -52719,20 +52719,18 @@ var About = React.createClass({displayName: "About",
 	render: function() {
 		return (
 				React.createElement("div", {className: "jumbotron"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("div", {className: "row"}, 
-							React.createElement("h1", null, "About"), 
-							"This is application use the following technologies:", 
-							React.createElement("ul", null, 
-								React.createElement("li", null, " React"), 
-								React.createElement("li", null, " React Router"), 
-								React.createElement("li", null, " Flux"), 
-								React.createElement("li", null, " Node"), 
-								React.createElement("li", null, " Gulp"), 
-								React.createElement("li", null, " Browerify")
-							)
-						)
-					)
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement("h1", null, "About"), 
+                        "This is application use the following technologies:", 
+                        React.createElement("ul", null, 
+                            React.createElement("li", null, " React"), 
+                            React.createElement("li", null, " React Router"), 
+                            React.createElement("li", null, " Flux"), 
+                            React.createElement("li", null, " Node"), 
+                            React.createElement("li", null, " Gulp"), 
+                            React.createElement("li", null, " Browerify")
+                        )
+                    )
 				)	
 			);
 	}
@@ -52751,7 +52749,9 @@ var App = React.createClass({displayName: "App",
 		return (
 				React.createElement("div", null, 
 					React.createElement(Header, null), 
-					this.props.children
+					React.createElement("div", {className: "container"}, 
+						this.props.children
+					)
 				)
 			);
 	}
@@ -52759,10 +52759,41 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./common/header":243,"react":234}],241:[function(require,module,exports){
+},{"./common/header":244,"react":234}],241:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
+var AuthorApi = require('../../api/authorApi');
+
+var AuthorDetailPage = React.createClass({displayName: "AuthorDetailPage",
+	getInitialState: function() {
+		return { author: ''};
+	},
+	componentDidMount: function() {
+		if (this.isMounted()) {
+			this.setState({author: AuthorApi.getAuthorById(this.props.params.id)});
+		}
+	},
+	render: function() {
+		
+		return (
+				React.createElement("div", {className: "jumbotron"}, 
+					React.createElement("ul", null, 
+						React.createElement("li", null, "ID: ", this.state.author.id), 
+						React.createElement("li", null, "Name: ", this.state.author.firstName, " ", this.state.author.lastName)
+					)
+				)
+			);
+	}
+});
+
+module.exports = AuthorDetailPage;
+
+},{"../../api/authorApi":237,"react":234}],242:[function(require,module,exports){
+"use strict";
+
+var React = require('react');
+var Link = require('react-router').Link;
 
 var AuthorList = React.createClass({displayName: "AuthorList",
 	propTypes: {
@@ -52773,32 +52804,30 @@ var AuthorList = React.createClass({displayName: "AuthorList",
 		var createAuthorRow = function(author) {
 			return (
 				React.createElement("tr", {key: author.id}, 
-					React.createElement("td", null, " ", React.createElement("a", {href: "/#authors/"+ author.id}, author.id)), 
+					React.createElement("td", null, " ", React.createElement(Link, {to: "/authors/detail/"+ author.id}, author.id)), 
 					React.createElement("td", null, " ", author.firstName, " ", author.lastName)
 				)	
 			);	
 		};
 		return (
-				React.createElement("div", {className: "jumbotron"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("table", {className: "table"}, 
-							React.createElement("thead", null, 
-								React.createElement("th", null, "ID"), 
-								React.createElement("th", null, "Name")
-							), 
-							React.createElement("tbody", null, 
-								this.props.authors.map(createAuthorRow, this)
-							)
-						)
-					)
-				)
+                React.createElement("div", {className: "jumbotron"}, 
+                    React.createElement("table", {className: "table"}, 
+                        React.createElement("thead", null, 
+                            React.createElement("th", null, "ID"), 
+                            React.createElement("th", null, "Name")
+                        ), 
+                        React.createElement("tbody", null, 
+                            this.props.authors.map(createAuthorRow, this)
+                        )
+                    )
+                )
 			);
 	}
 });
 
 module.exports = AuthorList;
 
-},{"react":234}],242:[function(require,module,exports){
+},{"react":234,"react-router":202}],243:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52820,20 +52849,9 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 	},
 
 	render: function() {
-		var createAuthorRow = function(author) {
-			return (
-				React.createElement("tr", {key: author.id}, 
-					React.createElement("td", null, " ", React.createElement("a", {href: "/#authors/"+ author.id}, author.id)), 
-					React.createElement("td", null, " ", author.firstName, " ", author.lastName)
-				)	
-			);	
-		};
 		return (
 				React.createElement("div", {className: "jumbotron"}, 
-					React.createElement("div", {className: "container"}, 
-						React.createElement("h1", null, "Authors page"), 
-						React.createElement(AuthorList, {authors: this.state.authors})
-					)
+					React.createElement(AuthorList, {authors: this.state.authors})
 				)
 			);
 	}
@@ -52841,7 +52859,7 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 
 module.exports = AuthorPage; 
 
-},{"../../api/authorApi":237,"./authorList":241,"react":234}],243:[function(require,module,exports){
+},{"../../api/authorApi":237,"./authorList":242,"react":234}],244:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52869,7 +52887,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header; 
 
-},{"react":234,"react-router":202}],244:[function(require,module,exports){
+},{"react":234,"react-router":202}],245:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -52889,7 +52907,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":234}],245:[function(require,module,exports){
+},{"react":234}],246:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
@@ -52905,15 +52923,17 @@ var Home = require('./components/homePage');
 var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
 var Authors = require('./components/authors/authorPage');
+var AuthorDetailPage = require('./components/authors/authorDetail');
 
 ReactDom.render((
     React.createElement(Router, {history: hashHistory}, 
         React.createElement(Route, {path: "/", component: App}, 
             React.createElement(IndexRoute, {component: Home}), 
             React.createElement(Route, {path: "about", component: About}), 
-            React.createElement(Route, {path: "authors", component: Authors})
+            React.createElement(Route, {path: "authors", component: Authors}), 
+            React.createElement(Route, {path: "authors/detail/:id", component: AuthorDetailPage})
         )
     )
   ), document.getElementById('root'));
 
-},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorPage":242,"./components/common/header":243,"./components/homePage":244,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[245]);
+},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorDetail":241,"./components/authors/authorPage":243,"./components/common/header":244,"./components/homePage":245,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[246]);

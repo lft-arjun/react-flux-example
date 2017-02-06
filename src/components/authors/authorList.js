@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var Link = require('react-router').Link;
 
 var AuthorList = React.createClass({
 	propTypes: {
@@ -11,25 +12,23 @@ var AuthorList = React.createClass({
 		var createAuthorRow = function(author) {
 			return (
 				<tr key={author.id}>
-					<td> <a href={"/#authors/"+ author.id}>{author.id}</a></td>
+					<td> <Link to={"/authors/detail/"+ author.id}>{author.id}</Link></td>
 					<td> {author.firstName} {author.lastName}</td>
 				</tr>	
 			);	
 		};
 		return (
-				<div className="jumbotron">
-					<div className="container">
-						<table className="table">
-							<thead>
-								<th>ID</th>
-								<th>Name</th>
-							</thead>
-							<tbody>
-								{this.props.authors.map(createAuthorRow, this)}
-							</tbody>
-						</table>
-					</div>
-				</div>
+                <div className="jumbotron">
+                    <table className="table">
+                        <thead>
+                            <th>ID</th>
+                            <th>Name</th>
+                        </thead>
+                        <tbody>
+                            {this.props.authors.map(createAuthorRow, this)}
+                        </tbody>
+                    </table>
+                </div>
 			);
 	}
 });
