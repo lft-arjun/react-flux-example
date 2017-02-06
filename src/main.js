@@ -2,38 +2,25 @@ $ = jQuery = require('jquery');
 
 var React = require('react');
 var ReactDom = require('react-dom');
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
+var IndexRoute = require('react-router').IndexRoute;
+var hashHistory = require('react-router').hashHistory;
+
+var App = require('./components/app');
 var Home = require('./components/homePage');
 var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
 var Authors = require('./components/authors/authorPage');
-( function(win) {
-	"use strict";
-var App = React.createClass({
 
-	render: function() {
-		var Child;
-
-		switch (this.props.route) {
-			case 'about': Child = About; break;
-			case 'authors': Child = Authors; break;
-			default: Child = Home;
-		}
-
-		return (
-				<div>
-					<Header />
-					<Child />
-				</div>
-			);
-	}
-}); 
-
-function render() {
-	var route = win.location.hash.substr(1);
-	ReactDom.render(<App route={route} />, document.getElementById('root'));
-}
-win.addEventListener('hashchange', render);
-
-render();
-})(window);
+ReactDom.render((
+    <Router history={hashHistory}>
+        <Route path="/" component={App}>
+            <IndexRoute component={Home} />
+            <Route path="about" component={About} />
+            <Route path="authors" component={Authors} />
+        </Route>
+    </Router>
+  ), document.getElementById('root'));
 

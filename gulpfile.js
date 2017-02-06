@@ -7,6 +7,8 @@ var reactify = require('reactify'); //Transforms react jsx to js
 var source = require('vinyl-source-stream'); // Use conventional text streams with gulp
 var concat = require('gulp-concat');
 var lint = require('gulp-eslint');//Lint js files, including jsx
+var historyApiFallback = require('connect-history-api-fallback');
+
 var config = {
 	port: 9005,
 	devBaseUrl: 'http:localhost',
@@ -30,7 +32,10 @@ gulp.task('connect', function() {
 	 	root: ['dist'],
 	 	port: config.port,
 	 	base: config.devBaseUrl,
-	 	livereload:true
+	 	livereload:true,
+	 	middleware: function(connect, opt) {
+            return [ historyApiFallback({}) ];
+        }
 	 });
 });
 
