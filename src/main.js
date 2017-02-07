@@ -14,6 +14,7 @@ var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
 var PageNotFound = require('./components/common/pageNotFound');
 var Authors = require('./components/authors/authorPage');
+var AuthorAddPage = require('./components/authors/authorAddPage');
 var AuthorDetailPage = require('./components/authors/authorDetail');
 
 ReactDom.render((
@@ -23,6 +24,7 @@ ReactDom.render((
             <Route path="about" component={About} />
             <Route path="authors" component={Authors} />
             <Route path="authors/detail/:id" component={AuthorDetailPage} />
+            <Route path="author/add" component={AuthorAddPage} />
         </Route>
         <Route path="*" component={PageNotFound} />
     </Router>

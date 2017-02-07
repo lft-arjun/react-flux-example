@@ -52759,7 +52759,47 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./common/header":244,"react":234}],241:[function(require,module,exports){
+},{"./common/header":246,"react":234}],241:[function(require,module,exports){
+"use strict";
+
+var React = require('react');
+var Router = require('react-router');
+var AuthorForm = require('./authorForm');
+var AuthorApi = require('../../api/authorApi');
+
+var AuthorAddPage = React.createClass({displayName: "AuthorAddPage",
+
+    getInitialState: function() {
+        return {
+            author: {id: '', firstName: '', lastName: ''}
+        }
+    },
+    setAutherState: function(event) {
+        var field = event.target.name;
+        var value = event.target.value;
+        this.state.author[field] = value;
+        return this.setState({author: this.state.author});
+    },
+    saveAuthor: function(event) {
+        event.preventDefault();
+        AuthorApi.saveAuthor(this.state.author);
+    },
+    render: function() {
+        return (
+            React.createElement("div", {className: "jumbotron"}, 
+                React.createElement(AuthorForm, {
+                 author: this.state.author, 
+                  onChange: this.setAutherState, 
+                  onSave: this.saveAuthor}
+                   )
+            )
+        );
+    }
+});
+
+module.exports = AuthorAddPage;
+
+},{"../../api/authorApi":237,"./authorForm":243,"react":234,"react-router":202}],242:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52789,7 +52829,39 @@ var AuthorDetailPage = React.createClass({displayName: "AuthorDetailPage",
 
 module.exports = AuthorDetailPage;
 
-},{"../../api/authorApi":237,"react":234}],242:[function(require,module,exports){
+},{"../../api/authorApi":237,"react":234}],243:[function(require,module,exports){
+"use strict";
+
+var React = require('react');
+var TextInput = require('../common/textInput'); 
+
+var AuthorForm = React.createClass({displayName: "AuthorForm",
+
+    render: function() {
+        return (
+            React.createElement("form", null, 
+                React.createElement(TextInput, {
+                    name: "firstName", 
+                    label: "First Name", 
+                    value: this.props.author.firstName, 
+                    onChange: this.props.onChange}
+                 ), 
+                 React.createElement(TextInput, {
+                    name: "lastName", 
+                    label: "Last Name", 
+                    value: this.props.author.lastName, 
+                    onChange: this.props.onChange}
+                 ), 
+               
+                React.createElement("button", {type: "submit", className: "btn btn-default", onClick: this.props.onSave}, "Submit")
+            )    
+            );
+    }
+});
+
+module.exports = AuthorForm;
+
+},{"../common/textInput":248,"react":234}],244:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52827,10 +52899,11 @@ var AuthorList = React.createClass({displayName: "AuthorList",
 
 module.exports = AuthorList;
 
-},{"react":234,"react-router":202}],243:[function(require,module,exports){
+},{"react":234,"react-router":202}],245:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
+var Link = require('react-router').Link;
 var AuthorApi = require('../../api/authorApi');
 var AuthorList = require('./authorList');
 
@@ -52851,6 +52924,7 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 	render: function() {
 		return (
 				React.createElement("div", {className: "jumbotron"}, 
+					React.createElement(Link, {to: "author/add", className: "btn btn-primary"}, "Add Author"), 
 					React.createElement(AuthorList, {authors: this.state.authors})
 				)
 			);
@@ -52859,7 +52933,7 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 
 module.exports = AuthorPage; 
 
-},{"../../api/authorApi":237,"./authorList":242,"react":234}],244:[function(require,module,exports){
+},{"../../api/authorApi":237,"./authorList":244,"react":234,"react-router":202}],246:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52887,7 +52961,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header; 
 
-},{"react":234,"react-router":202}],245:[function(require,module,exports){
+},{"react":234,"react-router":202}],247:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52900,7 +52974,46 @@ var PageNotFound = React.createClass({displayName: "PageNotFound",
 
 module.exports = PageNotFound;
 
-},{"react":234}],246:[function(require,module,exports){
+},{"react":234}],248:[function(require,module,exports){
+ "use strict";
+
+ var React = require('react');
+
+ var TextInput = React.createClass({displayName: "TextInput",
+    propTypes: {
+        name: React.PropTypes.string.isRequired,
+        label: React.PropTypes.string.isRequired,
+        onChange: React.PropTypes.func.isRequired,
+        placeholder: React.PropTypes.string,
+        value: React.PropTypes.string,
+        error: React.PropTypes.string
+    },
+    render: function() {
+        var wrapperClass = "form-group";
+        if (this.props.error && this.props.error.length > 0) {
+            wrapperClass += " " + "has-error";
+        }
+        return (
+            React.createElement("div", {className: wrapperClass}, 
+                React.createElement("label", {htmlFor: this.props.name}, this.props.label), 
+                React.createElement("input", {type: "text", 
+                name: this.props.name, 
+                ref: this.props.name, 
+                className: "form-control", 
+                 id: "exampleInputEmail1", 
+                 placeholder: this.props.placeholder, 
+                 onChange: this.props.onChange, 
+                 value: this.props.value}
+                 ), 
+                React.createElement("div", {className: "input"}, this.props.error, " ")
+            )
+        );
+    }
+});
+
+ module.exports = TextInput;
+
+},{"react":234}],249:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -52920,7 +53033,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":234}],247:[function(require,module,exports){
+},{"react":234}],250:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
@@ -52937,6 +53050,7 @@ var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
 var PageNotFound = require('./components/common/pageNotFound');
 var Authors = require('./components/authors/authorPage');
+var AuthorAddPage = require('./components/authors/authorAddPage');
 var AuthorDetailPage = require('./components/authors/authorDetail');
 
 ReactDom.render((
@@ -52945,10 +53059,11 @@ ReactDom.render((
             React.createElement(IndexRoute, {component: Home}), 
             React.createElement(Route, {path: "about", component: About}), 
             React.createElement(Route, {path: "authors", component: Authors}), 
-            React.createElement(Route, {path: "authors/detail/:id", component: AuthorDetailPage})
+            React.createElement(Route, {path: "authors/detail/:id", component: AuthorDetailPage}), 
+            React.createElement(Route, {path: "author/add", component: AuthorAddPage})
         ), 
         React.createElement(Route, {path: "*", component: PageNotFound})
     )
   ), document.getElementById('root'));
 
-},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorDetail":241,"./components/authors/authorPage":243,"./components/common/header":244,"./components/common/pageNotFound":245,"./components/homePage":246,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[247]);
+},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorAddPage":241,"./components/authors/authorDetail":242,"./components/authors/authorPage":245,"./components/common/header":246,"./components/common/pageNotFound":247,"./components/homePage":249,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[250]);
