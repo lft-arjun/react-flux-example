@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Router = require('react-router');
+var hashHistory = require('react-router').hashHistory;
 var AuthorForm = require('./authorForm');
 var AuthorApi = require('../../api/authorApi');
 
@@ -21,6 +22,7 @@ var AuthorAddPage = React.createClass({
     saveAuthor: function(event) {
         event.preventDefault();
         AuthorApi.saveAuthor(this.state.author);
+        hashHistory.push('/authors');
     },
     render: function() {
         return (
