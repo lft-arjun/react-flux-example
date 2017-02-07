@@ -52890,6 +52890,19 @@ module.exports = Header;
 },{"react":234,"react-router":202}],245:[function(require,module,exports){
 "use strict";
 
+var React = require('react');
+
+var PageNotFound = React.createClass({displayName: "PageNotFound",
+	render:function() {
+		return (React.createElement("div", null, "Page not found"));
+	}
+});
+
+module.exports = PageNotFound;
+
+},{"react":234}],246:[function(require,module,exports){
+"use strict";
+
 var React = require("react");
 
 var Home = React.createClass({displayName: "Home",
@@ -52907,7 +52920,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":234}],246:[function(require,module,exports){
+},{"react":234}],247:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
@@ -52922,6 +52935,7 @@ var App = require('./components/app');
 var Home = require('./components/homePage');
 var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
+var PageNotFound = require('./components/common/pageNotFound');
 var Authors = require('./components/authors/authorPage');
 var AuthorDetailPage = require('./components/authors/authorDetail');
 
@@ -52932,8 +52946,9 @@ ReactDom.render((
             React.createElement(Route, {path: "about", component: About}), 
             React.createElement(Route, {path: "authors", component: Authors}), 
             React.createElement(Route, {path: "authors/detail/:id", component: AuthorDetailPage})
-        )
+        ), 
+        React.createElement(Route, {path: "*", component: PageNotFound})
     )
   ), document.getElementById('root'));
 
-},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorDetail":241,"./components/authors/authorPage":243,"./components/common/header":244,"./components/homePage":245,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[246]);
+},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorDetail":241,"./components/authors/authorPage":243,"./components/common/header":244,"./components/common/pageNotFound":245,"./components/homePage":246,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[247]);

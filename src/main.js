@@ -12,6 +12,7 @@ var App = require('./components/app');
 var Home = require('./components/homePage');
 var About = require('./components/about/aboutPage');
 var Header = require('./components/common/header');
+var PageNotFound = require('./components/common/pageNotFound');
 var Authors = require('./components/authors/authorPage');
 var AuthorDetailPage = require('./components/authors/authorDetail');
 
@@ -23,6 +24,7 @@ ReactDom.render((
             <Route path="authors" component={Authors} />
             <Route path="authors/detail/:id" component={AuthorDetailPage} />
         </Route>
+        <Route path="*" component={PageNotFound} />
     </Router>
   ), document.getElementById('root'));
 
