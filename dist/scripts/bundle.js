@@ -1375,7 +1375,7 @@ var readState = exports.readState = function readState(key) {
   return undefined;
 };
 }).call(this,require('_process'))
-},{"_process":45,"warning":236}],28:[function(require,module,exports){
+},{"_process":45,"warning":237}],28:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1560,7 +1560,7 @@ var replaceLocation = exports.replaceLocation = function replaceLocation(locatio
   });
 };
 }).call(this,require('_process'))
-},{"./BrowserProtocol":26,"./DOMStateStorage":27,"./DOMUtils":28,"./LocationUtils":31,"./PathUtils":32,"_process":45,"warning":236}],31:[function(require,module,exports){
+},{"./BrowserProtocol":26,"./DOMStateStorage":27,"./DOMUtils":28,"./LocationUtils":31,"./PathUtils":32,"_process":45,"warning":237}],31:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1655,7 +1655,7 @@ var locationsAreEqual = exports.locationsAreEqual = function locationsAreEqual(a
   a.pathname === b.pathname && a.search === b.search && a.hash === b.hash && statesAreEqual(a.state, b.state);
 };
 }).call(this,require('_process'))
-},{"./Actions":24,"./PathUtils":32,"_process":45,"invariant":42,"warning":236}],32:[function(require,module,exports){
+},{"./Actions":24,"./PathUtils":32,"_process":45,"invariant":42,"warning":237}],32:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1759,7 +1759,7 @@ var createPath = exports.createPath = function createPath(location) {
   return path;
 };
 }).call(this,require('_process'))
-},{"_process":45,"warning":236}],33:[function(require,module,exports){
+},{"_process":45,"warning":237}],33:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2043,7 +2043,7 @@ var createHashHistory = function createHashHistory() {
 
 exports.default = createHashHistory;
 }).call(this,require('_process'))
-},{"./DOMUtils":28,"./ExecutionEnvironment":29,"./HashProtocol":30,"./createHistory":36,"_process":45,"invariant":42,"warning":236}],36:[function(require,module,exports){
+},{"./DOMUtils":28,"./ExecutionEnvironment":29,"./HashProtocol":30,"./createHistory":36,"_process":45,"invariant":42,"warning":237}],36:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2363,7 +2363,7 @@ var createMemoryHistory = function createMemoryHistory() {
 
 exports.default = createMemoryHistory;
 }).call(this,require('_process'))
-},{"./Actions":24,"./LocationUtils":31,"./PathUtils":32,"./createHistory":36,"_process":45,"invariant":42,"warning":236}],38:[function(require,module,exports){
+},{"./Actions":24,"./LocationUtils":31,"./PathUtils":32,"./createHistory":36,"_process":45,"invariant":42,"warning":237}],38:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2389,7 +2389,7 @@ var runTransitionHook = function runTransitionHook(hook, location, callback) {
 
 exports.default = runTransitionHook;
 }).call(this,require('_process'))
-},{"_process":45,"warning":236}],39:[function(require,module,exports){
+},{"_process":45,"warning":237}],39:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -49288,7 +49288,7 @@ function routerWarning(falseToWarn, message) {
 function _resetWarned() {
   warned = {};
 }
-},{"warning":236}],207:[function(require,module,exports){
+},{"warning":237}],207:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -52572,6 +52572,382 @@ module.exports = function (str) {
 };
 
 },{}],236:[function(require,module,exports){
+/*
+ * Toastr
+ * Copyright 2012-2014 
+ * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * All Rights Reserved.
+ * Use, reproduction, distribution, and modification of this code is subject to the terms and
+ * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
+ *
+ * ARIA Support: Greta Krafsig
+ *
+ * Project: https://github.com/CodeSeven/toastr
+ */
+; (function (define) {
+    define(['jquery'], function ($) {
+        return (function () {
+            var $container;
+            var listener;
+            var toastId = 0;
+            var toastType = {
+                error: 'error',
+                info: 'info',
+                success: 'success',
+                warning: 'warning'
+            };
+
+            var toastr = {
+                clear: clear,
+                remove: remove,
+                error: error,
+                getContainer: getContainer,
+                info: info,
+                options: {},
+                subscribe: subscribe,
+                success: success,
+                version: '2.1.0',
+                warning: warning
+            };
+
+            var previousToast;
+
+            return toastr;
+
+            //#region Accessible Methods
+            function error(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.error,
+                    iconClass: getOptions().iconClasses.error,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function getContainer(options, create) {
+                if (!options) { options = getOptions(); }
+                $container = $('#' + options.containerId);
+                if ($container.length) {
+                    return $container;
+                }
+                if (create) {
+                    $container = createContainer(options);
+                }
+                return $container;
+            }
+
+            function info(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.info,
+                    iconClass: getOptions().iconClasses.info,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function subscribe(callback) {
+                listener = callback;
+            }
+
+            function success(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.success,
+                    iconClass: getOptions().iconClasses.success,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function warning(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.warning,
+                    iconClass: getOptions().iconClasses.warning,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function clear($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if (!clearToast($toastElement, options)) {
+                    clearContainer(options);
+                }
+            }
+
+            function remove($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    removeToast($toastElement);
+                    return;
+                }
+                if ($container.children().length) {
+                    $container.remove();
+                }
+            }
+            //#endregion
+
+            //#region Internal Methods
+
+            function clearContainer (options) {
+                var toastsToClear = $container.children();
+                for (var i = toastsToClear.length - 1; i >= 0; i--) {
+                    clearToast($(toastsToClear[i]), options);
+                }
+            }
+
+            function clearToast ($toastElement, options) {
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () { removeToast($toastElement); }
+                    });
+                    return true;
+                }
+                return false;
+            }
+
+            function createContainer(options) {
+                $container = $('<div/>')
+                    .attr('id', options.containerId)
+                    .addClass(options.positionClass)
+                    .attr('aria-live', 'polite')
+                    .attr('role', 'alert');
+
+                $container.appendTo($(options.target));
+                return $container;
+            }
+
+            function getDefaults() {
+                return {
+                    tapToDismiss: true,
+                    toastClass: 'toast',
+                    containerId: 'toast-container',
+                    debug: false,
+
+                    showMethod: 'fadeIn', //fadeIn, slideDown, and show are built into jQuery
+                    showDuration: 300,
+                    showEasing: 'swing', //swing and linear are built into jQuery
+                    onShown: undefined,
+                    hideMethod: 'fadeOut',
+                    hideDuration: 1000,
+                    hideEasing: 'swing',
+                    onHidden: undefined,
+
+                    extendedTimeOut: 1000,
+                    iconClasses: {
+                        error: 'toast-error',
+                        info: 'toast-info',
+                        success: 'toast-success',
+                        warning: 'toast-warning'
+                    },
+                    iconClass: 'toast-info',
+                    positionClass: 'toast-top-right',
+                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    titleClass: 'toast-title',
+                    messageClass: 'toast-message',
+                    target: 'body',
+                    closeHtml: '<button>&times;</button>',
+                    newestOnTop: true,
+                    preventDuplicates: false,
+                    progressBar: false
+                };
+            }
+
+            function publish(args) {
+                if (!listener) { return; }
+                listener(args);
+            }
+
+            function notify(map) {
+                var options = getOptions(),
+                    iconClass = map.iconClass || options.iconClass;
+
+                if (options.preventDuplicates) {
+                    if (map.message === previousToast) {
+                        return;
+                    } else {
+                        previousToast = map.message;
+                    }
+                }
+
+                if (typeof (map.optionsOverride) !== 'undefined') {
+                    options = $.extend(options, map.optionsOverride);
+                    iconClass = map.optionsOverride.iconClass || iconClass;
+                }
+
+                toastId++;
+
+                $container = getContainer(options, true);
+                var intervalId = null,
+                    $toastElement = $('<div/>'),
+                    $titleElement = $('<div/>'),
+                    $messageElement = $('<div/>'),
+                    $progressElement = $('<div/>'),
+                    $closeElement = $(options.closeHtml),
+                    progressBar = {
+                        intervalId: null,
+                        hideEta: null,
+                        maxHideTime: null
+                    },
+                    response = {
+                        toastId: toastId,
+                        state: 'visible',
+                        startTime: new Date(),
+                        options: options,
+                        map: map
+                    };
+
+                if (map.iconClass) {
+                    $toastElement.addClass(options.toastClass).addClass(iconClass);
+                }
+
+                if (map.title) {
+                    $titleElement.append(map.title).addClass(options.titleClass);
+                    $toastElement.append($titleElement);
+                }
+
+                if (map.message) {
+                    $messageElement.append(map.message).addClass(options.messageClass);
+                    $toastElement.append($messageElement);
+                }
+
+                if (options.closeButton) {
+                    $closeElement.addClass('toast-close-button').attr('role', 'button');
+                    $toastElement.prepend($closeElement);
+                }
+
+                if (options.progressBar) {
+                    $progressElement.addClass('toast-progress');
+                    $toastElement.prepend($progressElement);
+                }
+
+                $toastElement.hide();
+                if (options.newestOnTop) {
+                    $container.prepend($toastElement);
+                } else {
+                    $container.append($toastElement);
+                }
+                $toastElement[options.showMethod](
+                    {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
+                );
+
+                if (options.timeOut > 0) {
+                    intervalId = setTimeout(hideToast, options.timeOut);
+                    progressBar.maxHideTime = parseFloat(options.timeOut);
+                    progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    if (options.progressBar) {
+                        progressBar.intervalId = setInterval(updateProgress, 10);
+                    }
+                }
+
+                $toastElement.hover(stickAround, delayedHideToast);
+                if (!options.onclick && options.tapToDismiss) {
+                    $toastElement.click(hideToast);
+                }
+
+                if (options.closeButton && $closeElement) {
+                    $closeElement.click(function (event) {
+                        if (event.stopPropagation) {
+                            event.stopPropagation();
+                        } else if (event.cancelBubble !== undefined && event.cancelBubble !== true) {
+                            event.cancelBubble = true;
+                        }
+                        hideToast(true);
+                    });
+                }
+
+                if (options.onclick) {
+                    $toastElement.click(function () {
+                        options.onclick();
+                        hideToast();
+                    });
+                }
+
+                publish(response);
+
+                if (options.debug && console) {
+                    console.log(response);
+                }
+
+                return $toastElement;
+
+                function hideToast(override) {
+                    if ($(':focus', $toastElement).length && !override) {
+                        return;
+                    }
+                    clearTimeout(progressBar.intervalId);
+                    return $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () {
+                            removeToast($toastElement);
+                            if (options.onHidden && response.state !== 'hidden') {
+                                options.onHidden();
+                            }
+                            response.state = 'hidden';
+                            response.endTime = new Date();
+                            publish(response);
+                        }
+                    });
+                }
+
+                function delayedHideToast() {
+                    if (options.timeOut > 0 || options.extendedTimeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.extendedTimeOut);
+                        progressBar.maxHideTime = parseFloat(options.extendedTimeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    }
+                }
+
+                function stickAround() {
+                    clearTimeout(intervalId);
+                    progressBar.hideEta = 0;
+                    $toastElement.stop(true, true)[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing}
+                    );
+                }
+
+                function updateProgress() {
+                    var percentage = ((progressBar.hideEta - (new Date().getTime())) / progressBar.maxHideTime) * 100;
+                    $progressElement.width(percentage + '%');
+                }
+            }
+
+            function getOptions() {
+                return $.extend({}, getDefaults(), toastr.options);
+            }
+
+            function removeToast($toastElement) {
+                if (!$container) { $container = getContainer(); }
+                if ($toastElement.is(':visible')) {
+                    return;
+                }
+                $toastElement.remove();
+                $toastElement = null;
+                if ($container.children().length === 0) {
+                    $container.remove();
+                }
+            }
+            //#endregion
+
+        })();
+    });
+}(typeof define === 'function' && define.amd ? define : function (deps, factory) {
+    if (typeof module !== 'undefined' && module.exports) { //Node
+        module.exports = factory(require('jquery'));
+    } else {
+        window['toastr'] = factory(window['jQuery']);
+    }
+}));
+
+},{"jquery":43}],237:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -52635,7 +53011,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":45}],237:[function(require,module,exports){
+},{"_process":45}],238:[function(require,module,exports){
 "use strict";
 
 //This file is mocking a web API by hitting hard coded data.
@@ -52687,7 +53063,7 @@ var AuthorApi = {
 
 module.exports = AuthorApi;
 
-},{"./authorData":238,"lodash":44}],238:[function(require,module,exports){
+},{"./authorData":239,"lodash":44}],239:[function(require,module,exports){
 module.exports = {
 	authors: 
 	[
@@ -52709,7 +53085,7 @@ module.exports = {
 	]
 };
 
-},{}],239:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52738,7 +53114,7 @@ var About = React.createClass({displayName: "About",
 
 module.exports = About;
 
-},{"react":234}],240:[function(require,module,exports){
+},{"react":234}],241:[function(require,module,exports){
 "use strict";
 var React = require('react');
 var Header = require('./common/header');
@@ -52759,12 +53135,13 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./common/header":246,"react":234}],241:[function(require,module,exports){
+},{"./common/header":247,"react":234}],242:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
 var Router = require('react-router');
 var hashHistory = require('react-router').hashHistory;
+var toastr = require('toastr');
 var AuthorForm = require('./authorForm');
 var AuthorApi = require('../../api/authorApi');
 
@@ -52784,7 +53161,8 @@ var AuthorAddPage = React.createClass({displayName: "AuthorAddPage",
     saveAuthor: function(event) {
         event.preventDefault();
         AuthorApi.saveAuthor(this.state.author);
-        hashHistory.push('/authors');
+        toastr.success('Your data has successfully saved.');
+        hashHistory.push('/authors'); 
     },
     render: function() {
         return (
@@ -52801,7 +53179,7 @@ var AuthorAddPage = React.createClass({displayName: "AuthorAddPage",
 
 module.exports = AuthorAddPage;
 
-},{"../../api/authorApi":237,"./authorForm":243,"react":234,"react-router":202}],242:[function(require,module,exports){
+},{"../../api/authorApi":238,"./authorForm":244,"react":234,"react-router":202,"toastr":236}],243:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52831,7 +53209,7 @@ var AuthorDetailPage = React.createClass({displayName: "AuthorDetailPage",
 
 module.exports = AuthorDetailPage;
 
-},{"../../api/authorApi":237,"react":234}],243:[function(require,module,exports){
+},{"../../api/authorApi":238,"react":234}],244:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52863,7 +53241,7 @@ var AuthorForm = React.createClass({displayName: "AuthorForm",
 
 module.exports = AuthorForm;
 
-},{"../common/textInput":248,"react":234}],244:[function(require,module,exports){
+},{"../common/textInput":249,"react":234}],245:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52901,7 +53279,7 @@ var AuthorList = React.createClass({displayName: "AuthorList",
 
 module.exports = AuthorList;
 
-},{"react":234,"react-router":202}],245:[function(require,module,exports){
+},{"react":234,"react-router":202}],246:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52935,7 +53313,7 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 
 module.exports = AuthorPage; 
 
-},{"../../api/authorApi":237,"./authorList":244,"react":234,"react-router":202}],246:[function(require,module,exports){
+},{"../../api/authorApi":238,"./authorList":245,"react":234,"react-router":202}],247:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52963,7 +53341,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header; 
 
-},{"react":234,"react-router":202}],247:[function(require,module,exports){
+},{"react":234,"react-router":202}],248:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -52976,7 +53354,7 @@ var PageNotFound = React.createClass({displayName: "PageNotFound",
 
 module.exports = PageNotFound;
 
-},{"react":234}],248:[function(require,module,exports){
+},{"react":234}],249:[function(require,module,exports){
  "use strict";
 
  var React = require('react');
@@ -53015,7 +53393,7 @@ module.exports = PageNotFound;
 
  module.exports = TextInput;
 
-},{"react":234}],249:[function(require,module,exports){
+},{"react":234}],250:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -53035,7 +53413,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":234}],250:[function(require,module,exports){
+},{"react":234}],251:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
@@ -53068,4 +53446,4 @@ ReactDom.render((
     )
   ), document.getElementById('root'));
 
-},{"./components/about/aboutPage":239,"./components/app":240,"./components/authors/authorAddPage":241,"./components/authors/authorDetail":242,"./components/authors/authorPage":245,"./components/common/header":246,"./components/common/pageNotFound":247,"./components/homePage":249,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[250]);
+},{"./components/about/aboutPage":240,"./components/app":241,"./components/authors/authorAddPage":242,"./components/authors/authorDetail":243,"./components/authors/authorPage":246,"./components/common/header":247,"./components/common/pageNotFound":248,"./components/homePage":250,"jquery":43,"react":234,"react-dom":48,"react-router":202}]},{},[251]);
