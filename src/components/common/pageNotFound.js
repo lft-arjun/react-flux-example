@@ -3,8 +3,12 @@
 var React = require('react');
 
 var PageNotFound = React.createClass({
-	render:function() {
-		return (<div>Page not found</div>);
+	render: function() {
+		return (
+			<div className="jumbotron">
+				Page not found. 404
+			</div>
+			);
 	}
 });
 

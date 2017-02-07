@@ -25,8 +25,8 @@ ReactDom.render((
             <Route path="authors" component={Authors} />
             <Route path="authors/detail/:id" component={AuthorDetailPage} />
             <Route path="author/add" component={AuthorAddPage} />
+            <Route path="*" component={PageNotFound} />
         </Route>
-        <Route path="*" component={PageNotFound} />
     </Router>
   ), document.getElementById('root'));
 
