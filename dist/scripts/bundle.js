@@ -53710,7 +53710,7 @@ var AuthorActions = {
 
 module.exports = AuthorActions;
 
-},{"../api/authorApi":245,"../constants/actionTypes":258,"../dispatcher/appDispatcher":259}],245:[function(require,module,exports){
+},{"../api/authorApi":245,"../constants/actionTypes":259,"../dispatcher/appDispatcher":260}],245:[function(require,module,exports){
 "use strict";
 
 //This file is mocking a web API by hitting hard coded data.
@@ -53769,17 +53769,20 @@ module.exports = {
 		{
 			id: 'cory-house', 
 			firstName: 'Cory', 
-			lastName: 'House'
+			lastName: 'House',
+			aboutYou: 'Who you are'
 		},	
 		{
 			id: 'scott-allen', 
 			firstName: 'Scott', 
-			lastName: 'Allen'
+			lastName: 'Allen',
+			aboutYou: 'I am Scott'
 		},	
 		{
 			id: 'dan-wahlin', 
 			firstName: 'Dan', 
-			lastName: 'Wahlin'
+			lastName: 'Wahlin',
+			aboutYou: 'I am Dan'
 		}
 	]
 };
@@ -53834,7 +53837,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./common/header":254,"react":240}],249:[function(require,module,exports){
+},{"./common/header":255,"react":240}],249:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53857,7 +53860,7 @@ var AuthorAddPage = React.createClass({displayName: "AuthorAddPage",
     },
     getInitialState: function() {
         return {
-            author: {id: '', firstName: '', lastName: ''},
+            author: {id: '', firstName: '', lastName: '', aboutYou: ''},
             errors: [],
             dirty: false
         };
@@ -53887,6 +53890,11 @@ var AuthorAddPage = React.createClass({displayName: "AuthorAddPage",
 
         if (this.state.author.lastName.length < 3) {
             this.state.errors.lastName = 'Last name must be at least 3 characters';
+            formIsValid = false;
+        }
+
+        if (this.state.author.aboutYou.length < 3) {
+            this.state.errors.aboutYou = 'This field must be at least 3 characters';
             formIsValid = false;
         }
         this.setState({errors: this.state.errors});
@@ -53922,7 +53930,7 @@ var AuthorAddPage = React.createClass({displayName: "AuthorAddPage",
 
 module.exports = AuthorAddPage;
 
-},{"../../actions/authorActions":244,"../../stores/authorStore":261,"./authorForm":251,"react":240,"react-router":208,"toastr":242}],250:[function(require,module,exports){
+},{"../../actions/authorActions":244,"../../stores/authorStore":262,"./authorForm":251,"react":240,"react-router":208,"toastr":242}],250:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -53957,6 +53965,7 @@ module.exports = AuthorDetailPage;
 
 var React = require('react');
 var TextInput = require('../common/textInput'); 
+var TextareaInput = require('../common/areaInput'); 
 
 var AuthorForm = React.createClass({displayName: "AuthorForm",
      propTypes: {
@@ -53982,6 +53991,13 @@ var AuthorForm = React.createClass({displayName: "AuthorForm",
                     onChange: this.props.onChange, 
                     error: this.props.errors.lastName}
                  ), 
+                 React.createElement(TextareaInput, {
+                    name: "aboutYou", 
+                    label: "Who you are", 
+                    value: this.props.author.aboutYou, 
+                    onChange: this.props.onChange, 
+                    error: this.props.errors.aboutYou}
+                 ), 
                
                 React.createElement("button", {type: "submit", className: "btn btn-default", onClick: this.props.onSave}, "Submit")
             )    
@@ -53991,7 +54007,7 @@ var AuthorForm = React.createClass({displayName: "AuthorForm",
 
 module.exports = AuthorForm;
 
-},{"../common/textInput":256,"react":240}],252:[function(require,module,exports){
+},{"../common/areaInput":254,"../common/textInput":257,"react":240}],252:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -54007,7 +54023,8 @@ var AuthorList = React.createClass({displayName: "AuthorList",
 			return (
 				React.createElement("tr", {key: author.id}, 
 					React.createElement("td", null, " ", React.createElement(Link, {to: "/authors/detail/" + author.id}, author.id)), 
-					React.createElement("td", null, " ", author.firstName, " ", author.lastName)
+                    React.createElement("td", null, " ", author.firstName, " ", author.lastName), 
+					React.createElement("td", null, " ", author.aboutYou)
 				)	
 			);	
 		};
@@ -54016,7 +54033,8 @@ var AuthorList = React.createClass({displayName: "AuthorList",
                     React.createElement("table", {className: "table"}, 
                         React.createElement("thead", null, 
                             React.createElement("th", null, "ID"), 
-                            React.createElement("th", null, "Name")
+                            React.createElement("th", null, "Name"), 
+                            React.createElement("th", null, "Who you are")
                         ), 
                         React.createElement("tbody", null, 
                             this.props.authors.map(createAuthorRow, this)
@@ -54065,7 +54083,46 @@ var AuthorPage = React.createClass({displayName: "AuthorPage",
 
 module.exports = AuthorPage; 
 
-},{"../../actions/authorActions":244,"../../stores/authorStore":261,"./authorList":252,"react":240,"react-router":208}],254:[function(require,module,exports){
+},{"../../actions/authorActions":244,"../../stores/authorStore":262,"./authorList":252,"react":240,"react-router":208}],254:[function(require,module,exports){
+ "use strict";
+
+ var React = require('react');
+
+ var TextareaInput = React.createClass({displayName: "TextareaInput",
+    propTypes: {
+        name: React.PropTypes.string.isRequired,
+        label: React.PropTypes.string.isRequired,
+        onChange: React.PropTypes.func.isRequired,
+        placeholder: React.PropTypes.string,
+        value: React.PropTypes.string,
+        error: React.PropTypes.string
+    },
+    render: function() {
+        var wrapperClass = "form-group";
+        if (this.props.error && this.props.error.length > 0) {
+            wrapperClass += " " + "has-error";
+        }
+        return (
+            React.createElement("div", {className: wrapperClass}, 
+                React.createElement("label", {htmlFor: this.props.name}, this.props.label), 
+                React.createElement("textarea", {type: "text", 
+                name: this.props.name, 
+                ref: this.props.name, 
+                className: "form-control", 
+                 id: "exampleInputEmail1", 
+                 placeholder: this.props.placeholder, 
+                 onChange: this.props.onChange, 
+                 value: this.props.value}
+                 ), 
+                React.createElement("div", {className: "input"}, this.props.error, " ")
+            )
+        );
+    }
+});
+
+ module.exports = TextareaInput;
+
+},{"react":240}],255:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -54076,7 +54133,7 @@ var Header = React.createClass({displayName: "Header",
 		return (
 				React.createElement("nav", {className: "navbar navbar-default"}, 
 					React.createElement("div", {className: "container-fluid"}, 
-						React.createElement("a", {href: "/", className: "navbar-brand"}, 
+						React.createElement(Link, {to: "/", className: "navbar-brand"}, 
 							React.createElement("img", {src: "images/small-logo.png", alt: "pint"})
 						), 
 						React.createElement("ul", {className: "nav navbar-nav"}, 
@@ -54093,7 +54150,7 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header; 
 
-},{"react":240,"react-router":208}],255:[function(require,module,exports){
+},{"react":240,"react-router":208}],256:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -54110,7 +54167,7 @@ var PageNotFound = React.createClass({displayName: "PageNotFound",
 
 module.exports = PageNotFound;
 
-},{"react":240}],256:[function(require,module,exports){
+},{"react":240}],257:[function(require,module,exports){
  "use strict";
 
  var React = require('react');
@@ -54149,7 +54206,7 @@ module.exports = PageNotFound;
 
  module.exports = TextInput;
 
-},{"react":240}],257:[function(require,module,exports){
+},{"react":240}],258:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -54169,7 +54226,7 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = Home; 
 
-},{"react":240}],258:[function(require,module,exports){
+},{"react":240}],259:[function(require,module,exports){
 "use strict";
 
 var keyMirror = require('keymirror');
@@ -54178,13 +54235,13 @@ module.exports = keyMirror({
 	CREATE_AUTHOR: null
 });
 
-},{"keymirror":48}],259:[function(require,module,exports){
+},{"keymirror":48}],260:[function(require,module,exports){
 
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();
 
-},{"flux":25}],260:[function(require,module,exports){
+},{"flux":25}],261:[function(require,module,exports){
 $ = jQuery = require('jquery');
 
 var React = require('react');
@@ -54217,7 +54274,7 @@ ReactDom.render((
     )
   ), document.getElementById('root'));
 
-},{"./components/about/aboutPage":247,"./components/app":248,"./components/authors/authorAddPage":249,"./components/authors/authorDetail":250,"./components/authors/authorPage":253,"./components/common/header":254,"./components/common/pageNotFound":255,"./components/homePage":257,"jquery":47,"react":240,"react-dom":54,"react-router":208}],261:[function(require,module,exports){
+},{"./components/about/aboutPage":247,"./components/app":248,"./components/authors/authorAddPage":249,"./components/authors/authorDetail":250,"./components/authors/authorPage":253,"./components/common/header":255,"./components/common/pageNotFound":256,"./components/homePage":258,"jquery":47,"react":240,"react-dom":54,"react-router":208}],262:[function(require,module,exports){
 "use strict";
 var Dispatcher = require('../dispatcher/appDispatcher');
 var ActionTypes = require('../constants/actionTypes');
@@ -54260,4 +54317,4 @@ Dispatcher.register(function(action) {
 
 module.exports = AuthorStore;
 
-},{"../constants/actionTypes":258,"../dispatcher/appDispatcher":259,"events":1,"lodash":49,"object-assign":50}]},{},[260]);
+},{"../constants/actionTypes":259,"../dispatcher/appDispatcher":260,"events":1,"lodash":49,"object-assign":50}]},{},[261]);

@@ -13,7 +13,8 @@ var AuthorList = React.createClass({
 			return (
 				<tr key={author.id}>
 					<td> <Link to= {"/authors/detail/" + author.id}>{author.id}</Link></td>
-					<td> {author.firstName} {author.lastName}</td>
+                    <td> {author.firstName} {author.lastName}</td>
+					<td> {author.aboutYou}</td>
 				</tr>	
 			);	
 		};
@@ -23,6 +24,7 @@ var AuthorList = React.createClass({
                         <thead>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Who you are</th>
                         </thead>
                         <tbody>
                             {this.props.authors.map(createAuthorRow, this)}

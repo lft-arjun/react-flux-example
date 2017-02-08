@@ -20,7 +20,7 @@ var AuthorAddPage = React.createClass({
     },
     getInitialState: function() {
         return {
-            author: {id: '', firstName: '', lastName: ''},
+            author: {id: '', firstName: '', lastName: '', aboutYou: ''},
             errors: [],
             dirty: false
         };
@@ -50,6 +50,11 @@ var AuthorAddPage = React.createClass({
 
         if (this.state.author.lastName.length < 3) {
             this.state.errors.lastName = 'Last name must be at least 3 characters';
+            formIsValid = false;
+        }
+
+        if (this.state.author.aboutYou.length < 3) {
+            this.state.errors.aboutYou = 'This field must be at least 3 characters';
             formIsValid = false;
         }
         this.setState({errors: this.state.errors});
