@@ -5,7 +5,9 @@ var Router = require('react-router');
 var hashHistory = require('react-router').hashHistory;
 var toastr = require('toastr');
 var AuthorForm = require('./authorForm');
-var AuthorApi = require('../../api/authorApi');
+// var AuthorApi = require('../../api/authorApi');
+var AuthorAction = require('../../actions/authorActions');
+var AuthorStore = require('../../stores/authorStore');
 
 var AuthorAddPage = React.createClass({
    
@@ -27,7 +29,7 @@ var AuthorAddPage = React.createClass({
         var authorId = this.props.params.id;
 
         if (authorId) {
-            this.setState({author: AuthorApi.getAuthorById(authorId)});
+            this.setState({author: authorStore.getAuthorById(authorId)});
         }
     },
     setAutherState: function(event) {
@@ -62,7 +64,7 @@ var AuthorAddPage = React.createClass({
             return;
         }
 
-        AuthorApi.saveAuthor(this.state.author);
+        AuthorAction.createAuthor(this.state.author);
         this.setState({dirty: false});
         toastr.success('Your data has successfully saved.'); 
         hashHistory.push('/authors'); 
