@@ -16,6 +16,7 @@ var PageNotFound = require('./components/common/pageNotFound');
 var Authors = require('./components/authors/authorPage');
 var AuthorAddPage = require('./components/authors/authorAddPage');
 var AuthorDetailPage = require('./components/authors/authorDetail');
+var UserPage = require('./components/users/userPage');
 
 ReactDom.render((
     <Router history={hashHistory}>
@@ -25,6 +26,7 @@ ReactDom.render((
             <Route path="authors" component={Authors} />
             <Route path="authors/detail/:id" component={AuthorDetailPage} />
             <Route path="author/add" component={AuthorAddPage} />
+            <Route path="users" component={UserPage} />
             <Route path="*" component={PageNotFound} />
         </Route>
     </Router>

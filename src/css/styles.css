@@ -3,3 +3,7 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
+.padding-lft-12 {
+	padding-left: 12px;
+}
