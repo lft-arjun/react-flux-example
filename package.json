@@ -1,7 +1,7 @@
 {
-  "name": "psadmin",
+  "name": "react-flux-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "learn react and flux",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
