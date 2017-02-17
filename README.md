@@ -5,6 +5,6 @@ install npm
 
 To Run Applications:
 
-cd path to your project direcotry
-run npm install
-to load application run "npm start -s"
+* cd path to your project direcotry
+* run npm install
+* to load application run "npm start -s"
